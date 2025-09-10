@@ -14,8 +14,10 @@ interface RevenueStreams {
 }
 
 interface OrganizationType {
-  count: number;
-  capturedCount: number; // Actual number of this organization type we capture
+  primaryCount: number;  // Number of campaigns in primary
+  generalCount: number;  // Number of campaigns in general (usually fewer)
+  capturedPrimaryCount: number; // Actual number of primary campaigns we capture
+  capturedGeneralCount: number; // Actual number of general campaigns we capture
   primarySpend: number;
   generalSpend: number;
   primaryFundraising: number;
@@ -61,14 +63,16 @@ const ProFormaCalculator: React.FC = () => {
   // Organization types with segmented data
   const [organizationTypes, setOrganizationTypes] = useState<Record<string, OrganizationType>>({
     localSmall: {
-      count: 12000,
-      capturedCount: 100,          // Local Small campaigns captured
+      primaryCount: 12000,
+      generalCount: 12000,
+      capturedPrimaryCount: 100,   // Local Small primary campaigns captured
+      capturedGeneralCount: 100,    // Local Small general campaigns captured
       primarySpend: 2000,
       generalSpend: 7500,
-      primaryFundraising: 2500,    // Typically 50% of media spend
-      generalFundraising: 7500,    // 75% of media spend
-      primarySms: 50000,           // 50K messages per campaign
-      generalSms: 100000,          // 100K messages per campaign
+      primaryFundraising: 5000,     // Average raise per campaign in primary
+      generalFundraising: 10000,    // Average raise per campaign in general
+      primarySms: 50000,            // 50K messages per campaign
+      generalSms: 100000,           // 100K messages per campaign
       subscriptionPrices: {
         votebuilder: 100,
         eventPlatform: 75,
@@ -77,14 +81,16 @@ const ProFormaCalculator: React.FC = () => {
       }
     },
     localLarge: {
-      count: 350,
-      capturedCount: 20,           // Local Large campaigns captured
+      primaryCount: 350,
+      generalCount: 350,
+      capturedPrimaryCount: 20,    // Local Large primary campaigns captured
+      capturedGeneralCount: 20,     // Local Large general campaigns captured
       primarySpend: 25000,
       generalSpend: 500000,
-      primaryFundraising: 150000,  // 60% of media spend  
-      generalFundraising: 1000000, // 80% of media spend
-      primarySms: 50000,           // 50K messages per campaign
-      generalSms: 250000,          // 250K messages per campaign
+      primaryFundraising: 100000,   // Average raise per campaign in primary
+      generalFundraising: 250000,   // Average raise per campaign in general
+      primarySms: 50000,            // 50K messages per campaign
+      generalSms: 250000,           // 250K messages per campaign
       subscriptionPrices: {
         votebuilder: 250,
         eventPlatform: 100,
@@ -93,14 +99,16 @@ const ProFormaCalculator: React.FC = () => {
       }
     },
     stateHouse: {
-      count: 4809,
-      capturedCount: 35,           // State House campaigns captured
+      primaryCount: 4809,
+      generalCount: 3735,           // Fewer make it to general
+      capturedPrimaryCount: 35,     // State House primary campaigns captured
+      capturedGeneralCount: 30,      // State House general campaigns captured
       primarySpend: 10000,
       generalSpend: 100000,
-      primaryFundraising: 35000,   // 70% of media spend
-      generalFundraising: 120000,  // 80% of media spend
-      primarySms: 10000,           // 10K messages per campaign
-      generalSms: 50000,           // 50K messages per campaign
+      primaryFundraising: 25000,    // Average raise per campaign in primary
+      generalFundraising: 50000,    // Average raise per campaign in general
+      primarySms: 10000,            // 10K messages per campaign
+      generalSms: 50000,            // 50K messages per campaign
       subscriptionPrices: {
         votebuilder: 400,
         eventPlatform: 100,
@@ -109,14 +117,16 @@ const ProFormaCalculator: React.FC = () => {
       }
     },
     stateSenate: {
-      count: 1254,
-      capturedCount: 20,           // State Senate campaigns captured
+      primaryCount: 1254,
+      generalCount: 982,            // Fewer make it to general
+      capturedPrimaryCount: 20,     // State Senate primary campaigns captured
+      capturedGeneralCount: 18,      // State Senate general campaigns captured
       primarySpend: 10000,
       generalSpend: 100000,
-      primaryFundraising: 50000,   // 80% of media spend
-      generalFundraising: 250000,  // 83% of media spend
-      primarySms: 50000,           // 50K messages per campaign
-      generalSms: 250000,          // 250K messages per campaign
+      primaryFundraising: 50000,    // Average raise per campaign in primary
+      generalFundraising: 150000,   // Average raise per campaign in general
+      primarySms: 50000,            // 50K messages per campaign
+      generalSms: 250000,           // 250K messages per campaign
       subscriptionPrices: {
         votebuilder: 500,
         eventPlatform: 150,
@@ -125,14 +135,16 @@ const ProFormaCalculator: React.FC = () => {
       }
     },
     statewide: {
-      count: 463,
-      capturedCount: 5,            // Statewide campaigns captured
+      primaryCount: 463,
+      generalCount: 270,            // Fewer make it to general
+      capturedPrimaryCount: 5,      // Statewide primary campaigns captured
+      capturedGeneralCount: 3,       // Statewide general campaigns captured
       primarySpend: 250000,
       generalSpend: 10000000,
-      primaryFundraising: 4500000, // 90% of media spend
-      generalFundraising: 18000000,// 90% of media spend  
-      primarySms: 500000,          // 500K messages per campaign
-      generalSms: 2000000,         // 2M messages per campaign
+      primaryFundraising: 500000,   // Average raise per campaign in primary
+      generalFundraising: 2000000,  // Average raise per campaign in general
+      primarySms: 500000,           // 500K messages per campaign
+      generalSms: 2000000,          // 2M messages per campaign
       subscriptionPrices: {
         votebuilder: 1000,
         eventPlatform: 250,
@@ -141,14 +153,16 @@ const ProFormaCalculator: React.FC = () => {
       }
     },
     usHouse: {
-      count: 870,
-      capturedCount: 20,           // U.S. House campaigns captured
+      primaryCount: 870,
+      generalCount: 425,            // Fewer make it to general
+      capturedPrimaryCount: 20,     // U.S. House primary campaigns captured
+      capturedGeneralCount: 12,      // U.S. House general campaigns captured
       primarySpend: 25000,
       generalSpend: 3000000,
-      primaryFundraising: 450000,
-      generalFundraising: 5000000,
-      primarySms: 50000,           // 50K messages per campaign
-      generalSms: 250000,          // 250K messages per campaign
+      primaryFundraising: 500000,   // Average raise per campaign in primary
+      generalFundraising: 2000000,  // Average raise per campaign in general
+      primarySms: 50000,            // 50K messages per campaign
+      generalSms: 250000,           // 250K messages per campaign
       subscriptionPrices: {
         votebuilder: 500,
         eventPlatform: 150,
@@ -157,14 +171,16 @@ const ProFormaCalculator: React.FC = () => {
       }
     },
     usSenate: {
-      count: 119,
-      capturedCount: 1,            // U.S. Senate campaigns captured
+      primaryCount: 119,
+      generalCount: 33,             // Fewer make it to general
+      capturedPrimaryCount: 1,      // U.S. Senate primary campaigns captured
+      capturedGeneralCount: 1,       // U.S. Senate general campaigns captured
       primarySpend: 2500000,
       generalSpend: 10000000,
-      primaryFundraising: 2000000, // 100% of media spend
-      generalFundraising: 10000000,// 100% of media spend
-      primarySms: 15000000,        // 15M messages per campaign
-      generalSms: 35000000,        // 35M messages per campaign
+      primaryFundraising: 2500000,  // Average raise per campaign in primary
+      generalFundraising: 10000000, // Average raise per campaign in general
+      primarySms: 15000000,         // 15M messages per campaign
+      generalSms: 35000000,         // 35M messages per campaign
       subscriptionPrices: {
         votebuilder: 1000,
         eventPlatform: 250,
@@ -196,7 +212,6 @@ const ProFormaCalculator: React.FC = () => {
   const [businessAssumptions, setBusinessAssumptions] = useState({
     saasServiceTakeRate: 30, // percentage who take multiple services
     marketplaceCommissionRate: 10, // percentage commission on GMV
-    monthlyMultiplier: 12, // annual calculation multiplier
   });
 
   // Calculate revenues based on inputs
@@ -207,23 +222,25 @@ const ProFormaCalculator: React.FC = () => {
     
     if (useMarketShareMode) {
       // Market Share Mode: Use percentage of Total Addressable Market
-      totalPrimaryMediaSpend = Object.values(organizationTypes).reduce((sum, type) => sum + (type.count * type.primarySpend), 0) * shareMultiplier;
-      totalGeneralMediaSpend = Object.values(organizationTypes).reduce((sum, type) => sum + (type.count * type.generalSpend), 0) * shareMultiplier;
-      totalPrimaryFundraising = Object.values(organizationTypes).reduce((sum, type) => sum + (type.count * type.primaryFundraising), 0) * shareMultiplier;
-      totalGeneralFundraising = Object.values(organizationTypes).reduce((sum, type) => sum + (type.count * type.generalFundraising), 0) * shareMultiplier;
-      totalPrimarySms = Object.values(organizationTypes).reduce((sum, type) => sum + (type.count * type.primarySms), 0) * shareMultiplier;
-      totalGeneralSms = Object.values(organizationTypes).reduce((sum, type) => sum + (type.count * type.generalSms), 0) * shareMultiplier;
+      totalPrimaryFundraising = Object.values(organizationTypes).reduce((sum, type) => sum + (type.primaryCount * type.primaryFundraising), 0) * shareMultiplier;
+      totalGeneralFundraising = Object.values(organizationTypes).reduce((sum, type) => sum + (type.generalCount * type.generalFundraising), 0) * shareMultiplier;
+      // Media spend is automatically 75% of fundraising (unless manually overridden in advanced settings)
+      totalPrimaryMediaSpend = totalPrimaryFundraising * 0.75;
+      totalGeneralMediaSpend = totalGeneralFundraising * 0.75;
+      totalPrimarySms = Object.values(organizationTypes).reduce((sum, type) => sum + (type.primaryCount * type.primarySms), 0) * shareMultiplier;
+      totalGeneralSms = Object.values(organizationTypes).reduce((sum, type) => sum + (type.generalCount * type.generalSms), 0) * shareMultiplier;
     } else {
       // Individual Mode: Use specific captured counts directly (no scaling)
-      totalPrimaryMediaSpend = Object.values(organizationTypes).reduce((sum, type) => sum + (type.capturedCount * type.primarySpend), 0);
-      totalGeneralMediaSpend = Object.values(organizationTypes).reduce((sum, type) => sum + (type.capturedCount * type.generalSpend), 0);
-      totalPrimaryFundraising = Object.values(organizationTypes).reduce((sum, type) => sum + (type.capturedCount * type.primaryFundraising), 0);
-      totalGeneralFundraising = Object.values(organizationTypes).reduce((sum, type) => sum + (type.capturedCount * type.generalFundraising), 0);
-      totalPrimarySms = Object.values(organizationTypes).reduce((sum, type) => sum + (type.capturedCount * type.primarySms), 0);
-      totalGeneralSms = Object.values(organizationTypes).reduce((sum, type) => sum + (type.capturedCount * type.generalSms), 0);
+      totalPrimaryFundraising = Object.values(organizationTypes).reduce((sum, type) => sum + (type.capturedPrimaryCount * type.primaryFundraising), 0);
+      totalGeneralFundraising = Object.values(organizationTypes).reduce((sum, type) => sum + (type.capturedGeneralCount * type.generalFundraising), 0);
+      // Media spend is automatically 75% of fundraising (unless manually overridden in advanced settings)
+      totalPrimaryMediaSpend = totalPrimaryFundraising * 0.75;
+      totalGeneralMediaSpend = totalGeneralFundraising * 0.75;
+      totalPrimarySms = Object.values(organizationTypes).reduce((sum, type) => sum + (type.capturedPrimaryCount * type.primarySms), 0);
+      totalGeneralSms = Object.values(organizationTypes).reduce((sum, type) => sum + (type.capturedGeneralCount * type.generalSms), 0);
     }
     
-    // Media Commissions (only 20% of captured campaigns purchase media)
+    // Media Commissions - mediaPurchaseRate now represents % of captured organizations using media portal
     const totalMediaMarket = totalPrimaryMediaSpend + totalGeneralMediaSpend;
     const mediaPurchaseMultiplier = mediaPurchaseRate / 100;
     const mediaCommissions = totalMediaMarket * mediaPurchaseMultiplier * (mediaCommissionRate / 100);
@@ -235,19 +252,22 @@ const ProFormaCalculator: React.FC = () => {
     // SaaS Subscriptions (calculated by organization type with different pricing)
     let saasSubscriptions = 0;
     Object.values(organizationTypes).forEach(type => {
-      const typeSubscriberCount = useMarketShareMode ? (type.count * shareMultiplier) : type.capturedCount;
+      // Use the larger of primary or general count (organizations that participate in either)
+      const typeSubscriberCount = useMarketShareMode 
+        ? (Math.max(type.primaryCount, type.generalCount) * shareMultiplier) 
+        : Math.max(type.capturedPrimaryCount, type.capturedGeneralCount);
       const typeAvgPrice = (
         type.subscriptionPrices.votebuilder + 
         type.subscriptionPrices.eventPlatform + 
         type.subscriptionPrices.mapping + 
         type.subscriptionPrices.advancedVoterData
       ) / 4;
-      saasSubscriptions += typeSubscriberCount * typeAvgPrice * businessAssumptions.monthlyMultiplier * (businessAssumptions.saasServiceTakeRate / 100);
+      saasSubscriptions += typeSubscriberCount * typeAvgPrice * 12 * (businessAssumptions.saasServiceTakeRate / 100);
     });
     
     // Marketplace - only apply scaling in Market Share mode
     const marketplaceScaling = useMarketShareMode ? shareMultiplier : 1;
-    const marketplace = (marketData.marketplaceListings * marketplaceScaling * businessAssumptions.monthlyMultiplier) + 
+    const marketplace = (marketData.marketplaceListings * marketplaceScaling * 12) + 
                        (marketData.contractorGmvAnnual * marketplaceScaling * (businessAssumptions.marketplaceCommissionRate / 100));
     
     // SMS Revenue (calculated from organization-specific SMS volumes)
@@ -257,7 +277,7 @@ const ProFormaCalculator: React.FC = () => {
     // Consulting - only apply scaling in Market Share mode  
     const totalConsulting = marketData.primaryConsulting + marketData.generalConsulting;
     const consultingScaling = useMarketShareMode ? shareMultiplier : 1;
-    const consulting = totalConsulting * consultingScaling * (consultingMargin / 100) * businessAssumptions.monthlyMultiplier;
+    const consulting = totalConsulting * consultingScaling * (consultingMargin / 100) * 12;
     
     // Return revenues without additional scaling (already applied in mode-specific calculations)
     return {
@@ -270,9 +290,9 @@ const ProFormaCalculator: React.FC = () => {
     };
   };
 
-  // Helper function to get total organizations
+  // Helper function to get total organizations (max of primary or general since they overlap)
   const getTotalOrganizations = () => {
-    return Object.values(organizationTypes).reduce((sum, type) => sum + type.count, 0);
+    return Object.values(organizationTypes).reduce((sum, type) => sum + Math.max(type.primaryCount, type.generalCount), 0);
   };
 
   // Helper function to get organizations count based on current mode
@@ -281,8 +301,9 @@ const ProFormaCalculator: React.FC = () => {
       // Market Share Mode: Show percentage of total addressable market
       return Math.round(getTotalOrganizations() * (marketShare / 100));
     } else {
-      // Individual Mode: Show the actual captured counts (what user set)
-      return Object.values(organizationTypes).reduce((sum, type) => sum + type.capturedCount, 0);
+      // Individual Mode: Show the actual captured counts (max of primary or general)
+      return Object.values(organizationTypes).reduce((sum, type) => 
+        sum + Math.max(type.capturedPrimaryCount, type.capturedGeneralCount), 0);
     }
   };
 
@@ -413,11 +434,13 @@ const ProFormaCalculator: React.FC = () => {
   const netProfit = totalRevenue - operatingCosts;
   const ebitdaMargin = ((totalRevenue - operatingCosts) / totalRevenue * 100) || 0;
   
-  // ROI based on 10% profit share from $300K investment
+  // ROI based on 10% profit share from $300K investment with 2x minimum guarantee
   const investmentAmount = 300000;
+  const minimumReturn = 600000; // 2x minimum return
   const profitSharePercentage = 10; // 10% of net profits
-  const annualProfitShare = netProfit * (profitSharePercentage / 100);
-  const roi = (annualProfitShare / investmentAmount * 100) || 0;
+  const calculatedProfitShare = netProfit * (profitSharePercentage / 100);
+  const annualProfitShare = Math.max(calculatedProfitShare, minimumReturn); // Greater of 10% or $600K
+  const roi = ((annualProfitShare - investmentAmount) / investmentAmount * 100) || 0; // ROI = profit/investment
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-mint-50 via-white to-mint-100">
@@ -484,7 +507,7 @@ const ProFormaCalculator: React.FC = () => {
                 </div>
               <p className="text-xs text-muted mb-1">Cash at Year End</p>
               <p className="text-xl font-heading font-medium text-ink">
-                ${((netProfit + 300000) / 1000000).toFixed(1)}M
+                ${((netProfit + investmentAmount - annualProfitShare) / 1000000).toFixed(1)}M
               </p>
               </div>
 
@@ -492,15 +515,18 @@ const ProFormaCalculator: React.FC = () => {
                 <div className="flex items-center justify-between mb-2">
                   <Activity className="w-7 h-7 text-success" />
                   <span className="text-xs font-medium text-success bg-success/10 px-2 py-1 rounded-full">
-                    10% Share
+                    {calculatedProfitShare >= minimumReturn ? '10% Share' : '2x Min'}
                   </span>
                 </div>
-                <p className="text-xs text-muted mb-1">ROI (Annual Return)</p>
+                <p className="text-xs text-muted mb-1">Investor ROI</p>
                 <p className="text-xl font-heading font-medium text-success">
                   {roi.toFixed(0)}%
                 </p>
                 <p className="text-xs text-muted">
                   ${(annualProfitShare / 1000000).toFixed(1)}M return
+                  {calculatedProfitShare < minimumReturn && (
+                    <span className="text-warning"> (2x min)</span>
+                  )}
                 </p>
               </div>
             </div>
@@ -706,13 +732,13 @@ const ProFormaCalculator: React.FC = () => {
                 </div>
                 <div>
                   <label className="text-sm font-medium text-ink mb-2 block">
-                    Media Purchase Rate
+                    Media Portal Adoption
                   </label>
                   <div className="flex items-center space-x-3">
                     <input
                       type="range"
                       min="10"
-                      max="50"
+                      max="100"
                       step="5"
                       value={mediaPurchaseRate}
                       onChange={(e) => setMediaPurchaseRate(Number(e.target.value))}
@@ -723,7 +749,7 @@ const ProFormaCalculator: React.FC = () => {
                     </span>
                   </div>
                   <p className="text-xs text-muted mt-1">
-                    % of captured campaigns that purchase media
+                    % of captured orgs using our media portal (75% of their funds go to media)
                   </p>
                 </div>
                 <div>
@@ -915,7 +941,7 @@ const ProFormaCalculator: React.FC = () => {
             {/* Business Assumptions Section */}
             <div>
               <h4 className="text-lg font-medium text-ink mb-4">Business Model Assumptions</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="text-sm font-medium text-ink mb-2 block">
                     SaaS Multi-Service Rate (%)
@@ -944,21 +970,6 @@ const ProFormaCalculator: React.FC = () => {
                     className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-mint-600 focus:ring-2 focus:ring-mint-100"
                   />
                   <p className="text-xs text-muted mt-1">% commission on contractor GMV</p>
-                </div>
-                
-                <div>
-                  <label className="text-sm font-medium text-ink mb-2 block">
-                    Annualization Multiplier
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="24"
-                    value={businessAssumptions.monthlyMultiplier}
-                    onChange={(e) => setBusinessAssumptions({...businessAssumptions, monthlyMultiplier: Number(e.target.value)})}
-                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-mint-600 focus:ring-2 focus:ring-mint-100"
-                  />
-                  <p className="text-xs text-muted mt-1">Multiplier for recurring revenue streams</p>
                 </div>
               </div>
             </div>
@@ -990,7 +1001,7 @@ const ProFormaCalculator: React.FC = () => {
                         <span className="text-muted">Media Market</span>
                         <p className="font-medium text-ink">
                           ${((Object.values(organizationTypes).reduce((sum, type) => 
-                            sum + (type.count * (type.primarySpend + type.generalSpend)), 0
+                            sum + ((type.primaryCount * type.primaryFundraising + type.generalCount * type.generalFundraising) * 0.75), 0
                           )) / 1000000000).toFixed(1)}B
                         </p>
                       </div>
@@ -1013,10 +1024,10 @@ const ProFormaCalculator: React.FC = () => {
                         <p className="font-medium text-mint-600">
                           ${useMarketShareMode 
                             ? (((Object.values(organizationTypes).reduce((sum, type) => 
-                                sum + (type.count * (type.primarySpend + type.generalSpend)), 0
+                                sum + ((type.primaryCount * type.primaryFundraising + type.generalCount * type.generalFundraising) * 0.75), 0
                               )) * (marketShare / 100)) / 1000000).toFixed(0)
                             : (((Object.values(organizationTypes).reduce((sum, type) => 
-                                sum + (type.capturedCount * (type.primarySpend + type.generalSpend)), 0
+                                sum + ((type.capturedPrimaryCount * type.primaryFundraising + type.capturedGeneralCount * type.generalFundraising) * 0.75), 0
                               )) / 1000000).toFixed(0))
                           }M
                         </p>
@@ -1047,10 +1058,12 @@ const ProFormaCalculator: React.FC = () => {
                       <div className="flex items-center space-x-4">
                         <h5 className="text-base font-medium text-ink">{typeLabels[key]}</h5>
                         <div className="flex items-center space-x-4 text-sm text-muted">
-                          <span>{type.count.toLocaleString()} orgs</span>
-                          <span className="bg-mint-100 text-mint-700 px-2 py-1 rounded text-xs font-medium">{type.capturedCount} captured</span>
-                          <span>${((type.primarySpend + type.generalSpend) * type.count / 1000000).toFixed(1)}M media</span>
-                          <span>${((type.primaryFundraising + type.generalFundraising) * type.count / 1000000).toFixed(1)}M fundraising</span>
+                          <span>P: {type.primaryCount.toLocaleString()} | G: {type.generalCount.toLocaleString()}</span>
+                          <span className="bg-mint-100 text-mint-700 px-2 py-1 rounded text-xs font-medium">
+                            P: {type.capturedPrimaryCount} | G: {type.capturedGeneralCount}
+                          </span>
+                          <span>${((type.primaryFundraising * type.primaryCount + type.generalFundraising * type.generalCount) / 1000000).toFixed(1)}M fundraising</span>
+                          <span>${(((type.primaryFundraising * type.primaryCount + type.generalFundraising * type.generalCount) * 0.75) / 1000000).toFixed(1)}M media (75%)</span>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -1070,46 +1083,79 @@ const ProFormaCalculator: React.FC = () => {
                     {expandedOrgs[key] && (
                       <div className="p-6 bg-white border-t border-gray-200">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-ink">Organization Count</span>
-                            <input
-                              type="number"
-                              value={type.count}
-                              onChange={(e) => {
-                                const newTypes = { ...organizationTypes };
-                                newTypes[key].count = Number(e.target.value);
-                                setOrganizationTypes(newTypes);
-                              }}
-                              className="w-24 px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-mint-600 focus:ring-1 focus:ring-mint-100"
-                            />
+                          <div>
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-medium text-ink">Primary Count</span>
+                              <input
+                                type="number"
+                                value={type.primaryCount}
+                                onChange={(e) => {
+                                  const newTypes = { ...organizationTypes };
+                                  newTypes[key].primaryCount = Number(e.target.value);
+                                  setOrganizationTypes(newTypes);
+                                }}
+                                className="w-24 px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-mint-600 focus:ring-1 focus:ring-mint-100"
+                              />
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm font-medium text-ink">General Count</span>
+                              <input
+                                type="number"
+                                value={type.generalCount}
+                                onChange={(e) => {
+                                  const newTypes = { ...organizationTypes };
+                                  newTypes[key].generalCount = Number(e.target.value);
+                                  setOrganizationTypes(newTypes);
+                                }}
+                                className="w-24 px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-mint-600 focus:ring-1 focus:ring-mint-100"
+                              />
+                            </div>
                           </div>
                           
                           <div>
-                            <div className="flex items-center justify-between mb-2">
-                              <span className="text-sm font-medium text-ink">Organizations Captured</span>
-                              <span className="text-sm font-medium text-mint-600">{type.capturedCount.toLocaleString()}</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
+                            <div className="mb-2">
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-sm font-medium text-ink">Primary Captured</span>
+                                <span className="text-sm font-medium text-mint-600">{type.capturedPrimaryCount.toLocaleString()}</span>
+                              </div>
                               <input
                                 type="range"
                                 min="0"
-                                max={type.count}
+                                max={type.primaryCount}
                                 step="1"
-                                value={type.capturedCount}
+                                value={type.capturedPrimaryCount}
                                 onChange={(e) => {
                                   const newTypes = { ...organizationTypes };
-                                  newTypes[key].capturedCount = Number(e.target.value);
+                                  newTypes[key].capturedPrimaryCount = Number(e.target.value);
                                   setOrganizationTypes(newTypes);
                                 }}
                                 disabled={useMarketShareMode}
-                                className={`flex-1 h-2 bg-mint-100 rounded-lg appearance-none ${
+                                className={`w-full h-2 bg-mint-100 rounded-lg appearance-none ${
                                   useMarketShareMode ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
                                 }`}
                               />
                             </div>
-                            <div className="flex justify-between text-xs text-muted mt-1">
-                              <span>0</span>
-                              <span>{type.count.toLocaleString()}</span>
+                            <div>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-sm font-medium text-ink">General Captured</span>
+                                <span className="text-sm font-medium text-mint-600">{type.capturedGeneralCount.toLocaleString()}</span>
+                              </div>
+                              <input
+                                type="range"
+                                min="0"
+                                max={type.generalCount}
+                                step="1"
+                                value={type.capturedGeneralCount}
+                                onChange={(e) => {
+                                  const newTypes = { ...organizationTypes };
+                                  newTypes[key].capturedGeneralCount = Number(e.target.value);
+                                  setOrganizationTypes(newTypes);
+                                }}
+                                disabled={useMarketShareMode}
+                                className={`w-full h-2 bg-mint-100 rounded-lg appearance-none ${
+                                  useMarketShareMode ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
+                                }`}
+                              />
                             </div>
                           </div>
                         </div>
@@ -1266,9 +1312,9 @@ const ProFormaCalculator: React.FC = () => {
                         <div className="bg-gray-50 p-3 rounded-lg">
                           <span className="font-medium text-ink block mb-2">Total Available Market (TAM)</span>
                           <div className="space-y-1 text-muted">
-                            <div>Media: ${((type.primarySpend + type.generalSpend) * type.count / 1000000).toFixed(1)}M</div>
-                            <div>Fundraising: ${((type.primaryFundraising + type.generalFundraising) * type.count / 1000000).toFixed(1)}M</div>
-                            <div>SMS: {((type.primarySms + type.generalSms) * type.count / 1000000000).toFixed(2)}B msgs</div>
+                            <div>Fundraising: ${((type.primaryFundraising * type.primaryCount + type.generalFundraising * type.generalCount) / 1000000).toFixed(1)}M</div>
+                            <div>Media (75%): ${(((type.primaryFundraising * type.primaryCount + type.generalFundraising * type.generalCount) * 0.75) / 1000000).toFixed(1)}M</div>
+                            <div>SMS: {((type.primarySms * type.primaryCount + type.generalSms * type.generalCount) / 1000000000).toFixed(2)}B msgs</div>
                           </div>
                         </div>
                       </div>
@@ -1278,17 +1324,20 @@ const ProFormaCalculator: React.FC = () => {
                             {useMarketShareMode ? 'Our Captured Market' : 'Target Organizations'}
                           </span>
                           <div className="space-y-1 text-mint-600 text-xs">
-                            <div>Organizations: {useMarketShareMode 
-                              ? Math.round(type.count * (marketShare / 100)).toLocaleString()
-                              : type.capturedCount.toLocaleString()
+                            <div>Primary: {useMarketShareMode 
+                              ? Math.round(type.primaryCount * (marketShare / 100)).toLocaleString()
+                              : type.capturedPrimaryCount.toLocaleString()
+                            } | General: {useMarketShareMode 
+                              ? Math.round(type.generalCount * (marketShare / 100)).toLocaleString()
+                              : type.capturedGeneralCount.toLocaleString()
                             }</div>
-                            <div>Media: ${useMarketShareMode 
-                              ? (((type.primarySpend + type.generalSpend) * type.count * (marketShare / 100) / 1000000).toFixed(1))
-                              : (((type.primarySpend + type.generalSpend) * type.capturedCount / 1000000).toFixed(1))
-                            }M</div>
                             <div>Fundraising: ${useMarketShareMode 
-                              ? (((type.primaryFundraising + type.generalFundraising) * type.count * (marketShare / 100) / 1000000).toFixed(1))
-                              : (((type.primaryFundraising + type.generalFundraising) * type.capturedCount / 1000000).toFixed(1))
+                              ? (((type.primaryFundraising * type.primaryCount + type.generalFundraising * type.generalCount) * (marketShare / 100) / 1000000).toFixed(1))
+                              : (((type.primaryFundraising * type.capturedPrimaryCount + type.generalFundraising * type.capturedGeneralCount) / 1000000).toFixed(1))
+                            }M</div>
+                            <div>Media (75%): ${useMarketShareMode 
+                              ? ((((type.primaryFundraising * type.primaryCount + type.generalFundraising * type.generalCount) * 0.75) * (marketShare / 100) / 1000000).toFixed(1))
+                              : ((((type.primaryFundraising * type.capturedPrimaryCount + type.generalFundraising * type.capturedGeneralCount) * 0.75) / 1000000).toFixed(1))
                             }M</div>
                           </div>
                         </div>
@@ -1435,6 +1484,32 @@ const ProFormaCalculator: React.FC = () => {
                   </div>
                 </div>
               </div>
+              
+              {/* Investor Returns Section */}
+              <div className="mt-4 p-4 bg-purple-50 rounded-xl border border-purple-200">
+                <h4 className="text-lg font-medium text-ink mb-3">Investor Returns</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                  <div>
+                    <span className="text-muted">Initial Investment:</span>
+                    <span className="font-medium text-ink ml-2">${(investmentAmount / 1000000).toFixed(1)}M</span>
+                  </div>
+                  <div>
+                    <span className="text-muted">Profit Share (10%):</span>
+                    <span className="font-medium text-ink ml-2">${(calculatedProfitShare / 1000000).toFixed(2)}M</span>
+                  </div>
+                  <div>
+                    <span className="text-muted">Actual Payout:</span>
+                    <span className="font-medium text-purple-600 ml-2">
+                      ${(annualProfitShare / 1000000).toFixed(2)}M
+                      {calculatedProfitShare < minimumReturn && ' (2x minimum)'}
+                    </span>
+                  </div>
+                </div>
+                <div className="mt-2 pt-2 border-t border-purple-200">
+                  <span className="text-sm text-muted">Company Retained Cash:</span>
+                  <span className="font-medium text-ink ml-2">${((netProfit + investmentAmount - annualProfitShare) / 1000000).toFixed(2)}M</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1519,7 +1594,10 @@ const ProFormaCalculator: React.FC = () => {
                             {quarter.months.map((month, index) => {
                               // Calculate cumulative cash (starting with $300K investment)
                               const previousMonths = monthlyData.slice(0, monthlyData.indexOf(month) + 1);
-                              const cumulativeCash = 300000 + previousMonths.reduce((sum, m) => sum + m.netProfit, 0);
+                              const monthIndex = monthlyData.indexOf(month);
+                              // Deduct investor payout in the last month (November 2026)
+                              const investorPayout = (monthIndex === monthlyData.length - 1) ? annualProfitShare : 0;
+                              const cumulativeCash = investmentAmount + previousMonths.reduce((sum, m) => sum + m.netProfit, 0) - investorPayout;
                               
                               return (
                                 <tr key={month.month} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
@@ -1544,6 +1622,11 @@ const ProFormaCalculator: React.FC = () => {
                                     cumulativeCash >= 0 ? 'text-success' : 'text-red-600'
                                   }`}>
                                     ${(cumulativeCash / 1000000).toFixed(2)}M
+                                    {investorPayout > 0 && (
+                                      <span className="text-xs text-warning block">
+                                        (after ${(investorPayout / 1000000).toFixed(1)}M payout)
+                                      </span>
+                                    )}
                                   </td>
                                   <td className="py-3 px-4 text-center">
                                     <span className={`text-xs px-2 py-1 rounded-full font-medium ${
