@@ -430,17 +430,12 @@ const ProFormaCalculator: React.FC = () => {
 
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Title */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-heading font-medium text-ink mb-2">ADVOTECATE Pro-Forma</h1>
-          <p className="text-lg text-muted">Interactive Financial Calculator</p>
-        </div>
 
         {/* Main Content Wrapper with flex ordering */}
         <div className="flex flex-col">
           {/* Key Metrics Cards - Sticky on desktop, bottom on mobile */}
           <div className="md:sticky md:top-4 md:z-40 mb-8 order-last md:order-first">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+            <div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-6 gap-4">
               <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-white/50 shadow-xl p-5">
                 <div className="flex items-center justify-between mb-2">
                   <DollarSign className="w-7 h-7 text-mint-600" />
