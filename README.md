@@ -1,46 +1,109 @@
-# Getting Started with Create React App
+# ADVOTECATE Interactive Pro-Forma Calculator
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A real-time financial modeling tool for ADVOTECATE's pitch deck, featuring interactive controls to adjust market assumptions and see instant revenue projections.
 
-## Available Scripts
+## 🚀 Features
 
-In the project directory, you can run:
+### Interactive Controls
+- **Market Share Slider** (1-100%): Adjust target market penetration
+- **Transaction Fee Controls**: 
+  - Total fee charged (basis points)
+  - Net profit after processor fees
+- **Subscription Pricing**: Individual pricing for each service
+  - Votebuilder
+  - Event Platform
+  - Mapping
+  - Advanced Voter Data
+- **Revenue Parameters**:
+  - Media commission rate (1-10%)
+  - SMS profit per message
+  - Consulting margin (5-30%)
 
-### `npm start`
+### Real-Time Calculations
+- Total Revenue
+- Net Income
+- EBITDA Margin
+- ROI (Return on Investment)
+- Cash at Year End
+- Organizations Captured
+- Revenue Breakdown by Stream
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 📊 Revenue Streams
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. **Media Commissions** - Commission on political ad spend
+2. **SaaS Subscriptions** - Monthly recurring revenue
+3. **Marketplace** - Listing fees and transaction commissions
+4. **Transaction Fees** - Payment processing profits
+5. **SMS Revenue** - Profit per campaign message
+6. **Consulting** - Margin on consulting services
+7. **Event Platform** - Event management subscriptions
 
-### `npm test`
+## 🎨 Design System
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Built with the Advotecate brand guidelines:
+- **Primary Color**: Mint Green (#3EB489)
+- **Typography**: Poppins (headings) + Figtree (body)
+- **Glass-morphic UI**: Translucent cards with backdrop blur
+- **Smooth Animations**: Floating elements and transitions
 
-### `npm run build`
+## 💻 Running the App
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+# Install dependencies
+npm install
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Start development server
+npm start
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Build for production
+npm run build
+```
 
-### `npm run eject`
+## 🔧 Technology Stack
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- **React** with TypeScript
+- **Tailwind CSS** for styling
+- **Lucide React** for icons
+- **Custom Advotecate theme**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 📈 Default Assumptions
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Based on the comprehensive market analysis:
+- **Total Market**: 23,265 political organizations
+- **Media Spend Market**: $21.7B annually
+- **SMS Volume**: 25.6B messages annually
+- **Default Target**: 5% market share
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## 🎯 Usage
 
-## Learn More
+1. **Adjust Market Share**: Use the main slider to see revenue at different penetration levels
+2. **Fine-tune Pricing**: Modify subscription prices to test different pricing strategies
+3. **Optimize Margins**: Adjust commission rates and profit margins
+4. **Export Results**: Screenshot or save the results for presentations
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 📱 Responsive Design
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The calculator is fully responsive and works on:
+- Desktop browsers
+- Tablets
+- Mobile devices (landscape recommended)
+
+## 🔗 Integration
+
+This calculator can be:
+- Embedded in pitch decks
+- Shared as a standalone link
+- Used in investor meetings
+- Exported as static images
+
+## 📝 Notes
+
+- All calculations are based on Year 1 projections
+- Operating costs are fixed at $1.488M annually
+- Initial investment assumed at $300K
+- Phased launch model (Sep-Nov build, Dec soft launch, Feb full launch)
+
+---
+
+**Created for ADVOTECATE Pitch Deck v2**  
+*Interactive Financial Modeling Tool*
