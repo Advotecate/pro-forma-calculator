@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  TrendingUp, DollarSign, Users, Zap, ChartBar, 
+  TrendingUp, DollarSign, Users, Zap, 
   Settings, Activity, Target
 } from 'lucide-react';
 
@@ -436,82 +436,86 @@ const ProFormaCalculator: React.FC = () => {
           <p className="text-lg text-muted">Interactive Financial Calculator</p>
         </div>
 
-        {/* Key Metrics Cards - Sticky */}
-        <div className="sticky top-4 z-40 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-            <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-white/50 shadow-xl p-5">
-              <div className="flex items-center justify-between mb-2">
-                <DollarSign className="w-7 h-7 text-mint-600" />
+        {/* Main Content Wrapper with flex ordering */}
+        <div className="flex flex-col">
+          {/* Key Metrics Cards - Sticky on desktop, bottom on mobile */}
+          <div className="md:sticky md:top-4 md:z-40 mb-8 order-last md:order-first">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+              <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-white/50 shadow-xl p-5">
+                <div className="flex items-center justify-between mb-2">
+                  <DollarSign className="w-7 h-7 text-mint-600" />
+                </div>
+                <p className="text-xs text-muted mb-1">Total Revenue</p>
+                <p className="text-xl font-heading font-medium text-ink">
+                  ${(totalRevenue / 1000000).toFixed(1)}M
+                </p>
               </div>
-              <p className="text-xs text-muted mb-1">Total Revenue</p>
-              <p className="text-xl font-heading font-medium text-ink">
-                ${(totalRevenue / 1000000).toFixed(1)}M
-              </p>
-            </div>
 
-            <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-red-200/50 shadow-xl p-5">
-              <div className="flex items-center justify-between mb-2">
-                <Settings className="w-7 h-7 text-red-600" />
+              <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-red-200/50 shadow-xl p-5">
+                <div className="flex items-center justify-between mb-2">
+                  <Settings className="w-7 h-7 text-red-600" />
+                </div>
+                <p className="text-xs text-muted mb-1">Operating Expenses</p>
+                <p className="text-xl font-heading font-medium text-red-600">
+                  ${(operatingCosts / 1000000).toFixed(1)}M
+                </p>
               </div>
-              <p className="text-xs text-muted mb-1">Operating Expenses</p>
-              <p className="text-xl font-heading font-medium text-red-600">
-                ${(operatingCosts / 1000000).toFixed(1)}M
-              </p>
-            </div>
 
-            <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-white/50 shadow-xl p-5">
-              <div className="flex items-center justify-between mb-2">
-                <TrendingUp className="w-7 h-7 text-mint-600" />
-                <span className="text-xs font-medium text-success bg-success/10 px-2 py-1 rounded-full">
-                  {ebitdaMargin.toFixed(1)}%
-                </span>
+              <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-white/50 shadow-xl p-5">
+                <div className="flex items-center justify-between mb-2">
+                  <TrendingUp className="w-7 h-7 text-mint-600" />
+                  <span className="text-xs font-medium text-success bg-success/10 px-2 py-1 rounded-full">
+                    {ebitdaMargin.toFixed(1)}%
+                  </span>
+                </div>
+                <p className="text-xs text-muted mb-1">Net Income</p>
+                <p className="text-xl font-heading font-medium text-ink">
+                  ${(netIncome / 1000000).toFixed(1)}M
+                </p>
               </div>
-              <p className="text-xs text-muted mb-1">Net Income</p>
-              <p className="text-xl font-heading font-medium text-ink">
-                ${(netIncome / 1000000).toFixed(1)}M
-              </p>
-            </div>
 
-            <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-white/50 shadow-xl p-5">
-              <div className="flex items-center justify-between mb-2">
-                <Users className="w-7 h-7 text-purple-600" />
+              <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-white/50 shadow-xl p-5">
+                <div className="flex items-center justify-between mb-2">
+                  <Users className="w-7 h-7 text-purple-600" />
+                </div>
+                <p className="text-xs text-muted mb-1">Organizations</p>
+                <p className="text-xl font-heading font-medium text-ink">
+                  {getEffectiveOrganizations().toLocaleString()}
+                </p>
               </div>
-              <p className="text-xs text-muted mb-1">Organizations</p>
-              <p className="text-xl font-heading font-medium text-ink">
-                {getEffectiveOrganizations().toLocaleString()}
-              </p>
-            </div>
 
-            <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-white/50 shadow-xl p-5">
-              <div className="flex items-center justify-between mb-2">
-                <Zap className="w-7 h-7 text-warning" />
+              <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-white/50 shadow-xl p-5">
+                <div className="flex items-center justify-between mb-2">
+                  <Zap className="w-7 h-7 text-warning" />
+                </div>
+                <p className="text-xs text-muted mb-1">Cash at Year End</p>
+                <p className="text-xl font-heading font-medium text-ink">
+                  ${((netIncome + 300000) / 1000000).toFixed(1)}M
+                </p>
               </div>
-              <p className="text-xs text-muted mb-1">Cash at Year End</p>
-              <p className="text-xl font-heading font-medium text-ink">
-                ${((netIncome + 300000) / 1000000).toFixed(1)}M
-              </p>
-            </div>
 
-            <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-success/50 shadow-xl p-5">
-              <div className="flex items-center justify-between mb-2">
-                <Activity className="w-7 h-7 text-success" />
-                <span className="text-xs font-medium text-success bg-success/10 px-2 py-1 rounded-full">
-                  10% Share
-                </span>
+              <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-success/50 shadow-xl p-5">
+                <div className="flex items-center justify-between mb-2">
+                  <Activity className="w-7 h-7 text-success" />
+                  <span className="text-xs font-medium text-success bg-success/10 px-2 py-1 rounded-full">
+                    10% Share
+                  </span>
+                </div>
+                <p className="text-xs text-muted mb-1">ROI (Annual Return)</p>
+                <p className="text-xl font-heading font-medium text-success">
+                  {roi.toFixed(0)}%
+                </p>
+                <p className="text-xs text-muted">
+                  ${(annualProfitShare / 1000000).toFixed(1)}M return
+                </p>
               </div>
-              <p className="text-xs text-muted mb-1">ROI (Annual Return)</p>
-              <p className="text-xl font-heading font-medium text-success">
-                {roi.toFixed(0)}%
-              </p>
-              <p className="text-xs text-muted">
-                ${(annualProfitShare / 1000000).toFixed(1)}M return
-              </p>
             </div>
           </div>
-        </div>
 
-        {/* Control Panel */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl border border-white/50 shadow-xl p-8 mb-8">
+          {/* Main Content */}
+          <div className="order-first md:order-last">
+            {/* Control Panel */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-3xl border border-white/50 shadow-xl p-8 mb-8">
           <h2 className="text-2xl font-heading font-medium text-ink mb-6 flex items-center">
             <Settings className="w-6 h-6 mr-3 text-mint-600" />
             Interactive Controls
@@ -1386,7 +1390,7 @@ const ProFormaCalculator: React.FC = () => {
         </div>
 
         {/* Monthly Financial Breakdown */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl border border-white/50 shadow-xl p-8">
+        <div className="bg-white/90 backdrop-blur-sm rounded-3xl border border-white/50 shadow-xl p-8 mt-12">
           <h2 className="text-2xl font-heading font-medium text-ink mb-6 flex items-center">
             <TrendingUp className="w-6 h-6 mr-3 text-mint-600" />
             Monthly Financial Projections
@@ -1561,6 +1565,8 @@ const ProFormaCalculator: React.FC = () => {
             >
               {Object.values(expandedQuarters).every(expanded => expanded) ? 'Collapse All Quarters' : 'Expand All Quarters'}
             </button>
+          </div>
+        </div>
           </div>
         </div>
       </div>
