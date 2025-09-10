@@ -185,7 +185,6 @@ const ProFormaCalculator: React.FC = () => {
   // Operating expenses (adjustable)
   const [operatingExpenses, setOperatingExpenses] = useState({
     engineering: 80000,        // Monthly engineering costs
-    mediaOperations: 0,        // Monthly media operations
     aiServices: 2500,          // Monthly AI/API costs
     salesGrowth: 25000,        // Monthly sales & growth
     infrastructure: 15000,     // Monthly infrastructure
@@ -791,18 +790,6 @@ const ProFormaCalculator: React.FC = () => {
                   </div>
                   
                   <div>
-                    <label className="text-sm font-medium text-ink mb-2 block">Media Operations ($)</label>
-                    <input
-                      type="number"
-                      step="1000"
-                      value={operatingExpenses.mediaOperations}
-                      onChange={(e) => setOperatingExpenses({...operatingExpenses, mediaOperations: Number(e.target.value)})}
-                      className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-mint-600 focus:ring-2 focus:ring-mint-100"
-                    />
-                    <p className="text-xs text-muted mt-1">Media buying relationships</p>
-                  </div>
-                  
-                  <div>
                     <label className="text-sm font-medium text-ink mb-2 block">AI Services ($)</label>
                     <input
                       type="number"
@@ -1385,7 +1372,6 @@ const ProFormaCalculator: React.FC = () => {
                 const percentage = (annualExpense / operatingCosts * 100) || 0;
                 const labels: Record<string, string> = {
                   engineering: 'Engineering',
-                  mediaOperations: 'Media Operations',
                   aiServices: 'AI Services',
                   salesGrowth: 'Sales & Growth',
                   infrastructure: 'Infrastructure',
