@@ -63,8 +63,8 @@ const ProFormaCalculator: React.FC = () => {
     localSmall: {
       count: 12000,
       capturedCount: 100,          // Local Small campaigns captured
-      primarySpend: 5000,
-      generalSpend: 10000,
+      primarySpend: 2000,
+      generalSpend: 7500,
       primaryFundraising: 2500,    // Typically 50% of media spend
       generalFundraising: 7500,    // 75% of media spend
       primarySms: 50000,           // 50K messages per campaign
@@ -95,8 +95,8 @@ const ProFormaCalculator: React.FC = () => {
     stateHouse: {
       count: 4809,
       capturedCount: 35,           // State House campaigns captured
-      primarySpend: 2500,
-      generalSpend: 150000,
+      primarySpend: 10000,
+      generalSpend: 100000,
       primaryFundraising: 35000,   // 70% of media spend
       generalFundraising: 120000,  // 80% of media spend
       primarySms: 10000,           // 10K messages per campaign
@@ -111,8 +111,8 @@ const ProFormaCalculator: React.FC = () => {
     stateSenate: {
       count: 1254,
       capturedCount: 20,           // State Senate campaigns captured
-      primarySpend: 5000,
-      generalSpend: 200000,
+      primarySpend: 10000,
+      generalSpend: 100000,
       primaryFundraising: 50000,   // 80% of media spend
       generalFundraising: 250000,  // 83% of media spend
       primarySms: 50000,           // 50K messages per campaign
@@ -128,7 +128,7 @@ const ProFormaCalculator: React.FC = () => {
       count: 463,
       capturedCount: 5,            // Statewide campaigns captured
       primarySpend: 250000,
-      generalSpend: 10000,
+      generalSpend: 10000000,
       primaryFundraising: 4500000, // 90% of media spend
       generalFundraising: 18000000,// 90% of media spend  
       primarySms: 500000,          // 500K messages per campaign
@@ -145,8 +145,8 @@ const ProFormaCalculator: React.FC = () => {
       capturedCount: 20,           // U.S. House campaigns captured
       primarySpend: 25000,
       generalSpend: 3000000,
-      primaryFundraising: 450000,  // 90% of media spend
-      generalFundraising: 270000,  // 90% of media spend
+      primaryFundraising: 450000,
+      generalFundraising: 5000000,
       primarySms: 50000,           // 50K messages per campaign
       generalSms: 250000,          // 250K messages per campaign
       subscriptionPrices: {
@@ -361,14 +361,14 @@ const ProFormaCalculator: React.FC = () => {
     return months.map(({ month, label, revenueMultiplier, launchPhase }) => {
       const monthlyRevenue = annualRevenue * revenueMultiplier;
       const monthlyExpenses = monthlyOpEx;
-      const netIncome = monthlyRevenue - monthlyExpenses;
+                      const netProfit = monthlyRevenue - monthlyExpenses;
       
       return {
         month,
         label,
         revenue: monthlyRevenue,
         expenses: monthlyExpenses,
-        netIncome,
+        netProfit,
         launchPhase,
         revenueMultiplier
       };
@@ -410,13 +410,13 @@ const ProFormaCalculator: React.FC = () => {
   const totalRevenue = Object.values(revenues).reduce((a, b) => a + b, 0);
   const totalMonthlyOpEx = Object.values(operatingExpenses).reduce((a, b) => a + b, 0);
   const operatingCosts = totalMonthlyOpEx * 12; // Annual OpEx
-  const netIncome = totalRevenue - operatingCosts;
+  const netProfit = totalRevenue - operatingCosts;
   const ebitdaMargin = ((totalRevenue - operatingCosts) / totalRevenue * 100) || 0;
   
   // ROI based on 10% profit share from $300K investment
   const investmentAmount = 300000;
   const profitSharePercentage = 10; // 10% of net profits
-  const annualProfitShare = netIncome * (profitSharePercentage / 100);
+  const annualProfitShare = netProfit * (profitSharePercentage / 100);
   const roi = (annualProfitShare / investmentAmount * 100) || 0;
 
   return (
@@ -462,9 +462,9 @@ const ProFormaCalculator: React.FC = () => {
                     {ebitdaMargin.toFixed(1)}%
                   </span>
                 </div>
-                <p className="text-xs text-muted mb-1">Net Income</p>
+                <p className="text-xs text-muted mb-1">Net Profit</p>
                 <p className="text-xl font-heading font-medium text-ink">
-                  ${(netIncome / 1000000).toFixed(1)}M
+                  ${(netProfit / 1000000).toFixed(1)}M
                 </p>
               </div>
 
@@ -482,10 +482,10 @@ const ProFormaCalculator: React.FC = () => {
                 <div className="flex items-center justify-between mb-2">
                   <Zap className="w-7 h-7 text-warning" />
                 </div>
-                <p className="text-xs text-muted mb-1">Cash at Year End</p>
-                <p className="text-xl font-heading font-medium text-ink">
-                  ${((netIncome + 300000) / 1000000).toFixed(1)}M
-                </p>
+              <p className="text-xs text-muted mb-1">Cash at Year End</p>
+              <p className="text-xl font-heading font-medium text-ink">
+                ${((netProfit + 300000) / 1000000).toFixed(1)}M
+              </p>
               </div>
 
               <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-success/50 shadow-xl p-5">
@@ -1426,7 +1426,7 @@ const ProFormaCalculator: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <span className="text-lg font-heading font-medium text-ink">Net Profit</span>
                     <span className="text-2xl font-heading font-medium text-success">
-                      ${(netIncome / 1000000).toFixed(2)}M
+                      ${(netProfit / 1000000).toFixed(2)}M
                     </span>
                   </div>
                   <div className="text-center mt-2">
@@ -1454,8 +1454,8 @@ const ProFormaCalculator: React.FC = () => {
               const quarterTotal = quarter.months.reduce((sum, month) => ({
                 revenue: sum.revenue + month.revenue,
                 expenses: sum.expenses + month.expenses,
-                netIncome: sum.netIncome + month.netIncome
-              }), { revenue: 0, expenses: 0, netIncome: 0 });
+                netProfit: sum.netProfit + month.netProfit
+              }), { revenue: 0, expenses: 0, netProfit: 0 });
 
               return (
                 <div key={quarterKey} className="border border-gray-200 rounded-xl overflow-hidden">
@@ -1484,9 +1484,9 @@ const ProFormaCalculator: React.FC = () => {
                             </p>
                           </div>
                           <div className="text-right">
-                            <p className="text-xs text-muted">Quarter Net Income</p>
-                            <p className={`text-sm font-medium ${quarterTotal.netIncome >= 0 ? 'text-success' : 'text-red-600'}`}>
-                              ${(quarterTotal.netIncome / 1000000).toFixed(2)}M
+                            <p className="text-xs text-muted">Quarter Net Profit</p>
+                            <p className={`text-sm font-medium ${quarterTotal.netProfit >= 0 ? 'text-success' : 'text-red-600'}`}>
+                              ${(quarterTotal.netProfit / 1000000).toFixed(2)}M
                             </p>
                           </div>
                         </div>
@@ -1510,7 +1510,7 @@ const ProFormaCalculator: React.FC = () => {
                               <th className="text-left py-3 px-4 font-medium text-ink">Month</th>
                               <th className="text-right py-3 px-4 font-medium text-ink">Revenue</th>
                               <th className="text-right py-3 px-4 font-medium text-ink">Expenses</th>
-                              <th className="text-right py-3 px-4 font-medium text-ink">Net Income</th>
+                              <th className="text-right py-3 px-4 font-medium text-ink">Net Profit</th>
                               <th className="text-right py-3 px-4 font-medium text-ink">Cumulative Cash</th>
                               <th className="text-center py-3 px-4 font-medium text-ink">Phase</th>
                             </tr>
@@ -1519,7 +1519,7 @@ const ProFormaCalculator: React.FC = () => {
                             {quarter.months.map((month, index) => {
                               // Calculate cumulative cash (starting with $300K investment)
                               const previousMonths = monthlyData.slice(0, monthlyData.indexOf(month) + 1);
-                              const cumulativeCash = 300000 + previousMonths.reduce((sum, m) => sum + m.netIncome, 0);
+                              const cumulativeCash = 300000 + previousMonths.reduce((sum, m) => sum + m.netProfit, 0);
                               
                               return (
                                 <tr key={month.month} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
@@ -1536,9 +1536,9 @@ const ProFormaCalculator: React.FC = () => {
                                     ${(month.expenses / 1000).toFixed(0)}K
                                   </td>
                                   <td className={`py-3 px-4 text-right font-medium ${
-                                    month.netIncome >= 0 ? 'text-success' : 'text-red-600'
+                                    month.netProfit >= 0 ? 'text-success' : 'text-red-600'
                                   }`}>
-                                    ${(month.netIncome / 1000).toFixed(0)}K
+                                    ${(month.netProfit / 1000).toFixed(0)}K
                                   </td>
                                   <td className={`py-3 px-4 text-right font-medium ${
                                     cumulativeCash >= 0 ? 'text-success' : 'text-red-600'
@@ -1580,9 +1580,9 @@ const ProFormaCalculator: React.FC = () => {
                             <p className="font-medium text-red-600">${(quarterTotal.expenses / 1000000).toFixed(2)}M</p>
                           </div>
                           <div className="text-center p-3 bg-green-50 rounded-lg">
-                            <p className="text-muted mb-1">Quarter Net Income</p>
-                            <p className={`font-medium ${quarterTotal.netIncome >= 0 ? 'text-success' : 'text-red-600'}`}>
-                              ${(quarterTotal.netIncome / 1000000).toFixed(2)}M
+                            <p className="text-muted mb-1">Quarter Net Profit</p>
+                            <p className={`font-medium ${quarterTotal.netProfit >= 0 ? 'text-success' : 'text-red-600'}`}>
+                              ${(quarterTotal.netProfit / 1000000).toFixed(2)}M
                             </p>
                           </div>
                           <div className="text-center p-3 bg-blue-50 rounded-lg">
