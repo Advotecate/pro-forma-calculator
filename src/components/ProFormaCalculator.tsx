@@ -32,7 +32,7 @@ interface OrganizationType {
 
 const ProFormaCalculator: React.FC = () => {
   // State for all interactive controls
-  const [marketShare, setMarketShare] = useState(5);
+  const [marketShare, setMarketShare] = useState(3);
   const [transactionFeeTotal, setTransactionFeeTotal] = useState(350); // basis points
   const [transactionFeeNet, setTransactionFeeNet] = useState(100); // basis points we keep
 
@@ -67,127 +67,127 @@ const ProFormaCalculator: React.FC = () => {
       primarySms: 50000,           // 50K messages per campaign
       generalSms: 100000,          // 100K messages per campaign
       subscriptionPrices: {
-        votebuilder: 500,
-        eventPlatform: 150,
-        mapping: 300,
-        advancedVoterData: 800,
+        votebuilder: 100,
+        eventPlatform: 75,
+        mapping: 100,
+        advancedVoterData: 250,
       }
     },
     localLarge: {
       count: 350,
-      captureRate: 12,             // 12% of local large campaigns
-      primarySpend: 2000000,
-      generalSpend: 5000000,
-      primaryFundraising: 1200000, // 60% of media spend  
-      generalFundraising: 4000000, // 80% of media spend
-      primarySms: 2000000,         // 2M messages per campaign
-      generalSms: 5000000,         // 5M messages per campaign
+      captureRate: 10,             // 10% of local large campaigns
+      primarySpend: 25000,
+      generalSpend: 500000,
+      primaryFundraising: 150000,  // 60% of media spend  
+      generalFundraising: 1000000, // 80% of media spend
+      primarySms: 50000,           // 50K messages per campaign
+      generalSms: 250000,          // 250K messages per campaign
       subscriptionPrices: {
-        votebuilder: 2000,
-        eventPlatform: 500,
-        mapping: 1200,
-        advancedVoterData: 3000,
+        votebuilder: 250,
+        eventPlatform: 100,
+        mapping: 200,
+        advancedVoterData: 400,
       }
     },
     stateHouse: {
       count: 4809,
-      captureRate: 15,             // 15% of state house campaigns
-      primarySpend: 50000,
+      captureRate: 17,             // 17% of state house campaigns
+      primarySpend: 2500,
       generalSpend: 150000,
       primaryFundraising: 35000,   // 70% of media spend
       generalFundraising: 120000,  // 80% of media spend
-      primarySms: 200000,          // 200K messages per campaign
-      generalSms: 500000,          // 500K messages per campaign
+      primarySms: 10000,           // 10K messages per campaign
+      generalSms: 50000,           // 50K messages per campaign
       subscriptionPrices: {
-        votebuilder: 800,
-        eventPlatform: 200,
-        mapping: 600,
-        advancedVoterData: 1500,
+        votebuilder: 400,
+        eventPlatform: 100,
+        mapping: 200,
+        advancedVoterData: 500,
       }
     },
     stateSenate: {
       count: 1254,
       captureRate: 20,             // 20% of state senate campaigns
-      primarySpend: 100000,
-      generalSpend: 300000,
-      primaryFundraising: 80000,   // 80% of media spend
+      primarySpend: 5000,
+      generalSpend: 200000,
+      primaryFundraising: 50000,   // 80% of media spend
       generalFundraising: 250000,  // 83% of media spend
-      primarySms: 400000,          // 400K messages per campaign
-      generalSms: 1000000,         // 1M messages per campaign
+      primarySms: 50000,           // 50K messages per campaign
+      generalSms: 250000,          // 250K messages per campaign
       subscriptionPrices: {
-        votebuilder: 1200,
-        eventPlatform: 300,
-        mapping: 800,
-        advancedVoterData: 2000,
+        votebuilder: 500,
+        eventPlatform: 150,
+        mapping: 250,
+        advancedVoterData: 750,
       }
     },
     statewide: {
       count: 463,
-      captureRate: 35,             // 35% of statewide campaigns
-      primarySpend: 5000000,
-      generalSpend: 20000000,
+      captureRate: 4,              // 4% of statewide campaigns
+      primarySpend: 250000,
+      generalSpend: 10000,
       primaryFundraising: 4500000, // 90% of media spend
       generalFundraising: 18000000,// 90% of media spend  
-      primarySms: 10000000,        // 10M messages per campaign
-      generalSms: 25000000,        // 25M messages per campaign
+      primarySms: 500000,          // 500K messages per campaign
+      generalSms: 2000000,         // 2M messages per campaign
       subscriptionPrices: {
-        votebuilder: 5000,
-        eventPlatform: 1500,
-        mapping: 3000,
-        advancedVoterData: 8000,
+        votebuilder: 1000,
+        eventPlatform: 250,
+        mapping: 450,
+        advancedVoterData: 1500,
       }
     },
     usHouse: {
       count: 870,
-      captureRate: 40,             // 40% of U.S. House campaigns
-      primarySpend: 500000,
+      captureRate: 25,             // 25% of U.S. House campaigns
+      primarySpend: 25000,
       generalSpend: 3000000,
       primaryFundraising: 450000,  // 90% of media spend
-      generalFundraising: 2700000, // 90% of media spend
-      primarySms: 2000000,         // 2M messages per campaign
-      generalSms: 8000000,         // 8M messages per campaign
+      generalFundraising: 270000,  // 90% of media spend
+      primarySms: 50000,           // 50K messages per campaign
+      generalSms: 250000,          // 250K messages per campaign
       subscriptionPrices: {
-        votebuilder: 2500,
-        eventPlatform: 800,
-        mapping: 1500,
-        advancedVoterData: 4000,
+        votebuilder: 500,
+        eventPlatform: 150,
+        mapping: 250,
+        advancedVoterData: 1000,
       }
     },
     usSenate: {
       count: 119,
-      captureRate: 60,             // 60% of U.S. Senate campaigns
-      primarySpend: 5000000,
-      generalSpend: 20000000,
-      primaryFundraising: 5000000, // 100% of media spend
-      generalFundraising: 20000000,// 100% of media spend
+      captureRate: 10,             // 10% of U.S. Senate campaigns
+      primarySpend: 2500000,
+      generalSpend: 10000000,
+      primaryFundraising: 2000000, // 100% of media spend
+      generalFundraising: 10000000,// 100% of media spend
       primarySms: 15000000,        // 15M messages per campaign
       generalSms: 35000000,        // 35M messages per campaign
       subscriptionPrices: {
-        votebuilder: 8000,
-        eventPlatform: 2500,
-        mapping: 4000,
-        advancedVoterData: 12000,
+        votebuilder: 1000,
+        eventPlatform: 250,
+        mapping: 450,
+        advancedVoterData: 1500,
       }
     }
   });
 
   // Additional market data (non-organization specific)
   const [marketData, setMarketData] = useState({
-    primaryConsulting: 17595000,
-    generalConsulting: 14303000,
-    marketplaceListings: 6250000,
-    contractorGmvAnnual: 167502000,
+    primaryConsulting: 15000000,
+    generalConsulting: 15000000,
+    marketplaceListings: 5000000,
+    contractorGmvAnnual: 10000000,
   });
 
   // Operating expenses (adjustable)
   const [operatingExpenses, setOperatingExpenses] = useState({
-    engineering: 45000,        // Monthly engineering costs
-    mediaOperations: 15000,    // Monthly media operations
-    aiServices: 10000,         // Monthly AI/API costs
-    salesGrowth: 18000,        // Monthly sales & growth
-    infrastructure: 8000,      // Monthly infrastructure
-    marketing: 8000,           // Monthly marketing
-    compliance: 5000,          // Monthly compliance/legal
+    engineering: 80000,        // Monthly engineering costs
+    mediaOperations: 0,        // Monthly media operations
+    aiServices: 2500,          // Monthly AI/API costs
+    salesGrowth: 25000,        // Monthly sales & growth
+    infrastructure: 15000,     // Monthly infrastructure
+    marketing: 25000,          // Monthly marketing
+    compliance: 10000,         // Monthly compliance/legal
   });
 
   // Business assumptions (now adjustable)
@@ -272,7 +272,15 @@ const ProFormaCalculator: React.FC = () => {
   const operatingCosts = totalMonthlyOpEx * 12; // Annual OpEx
   const netIncome = totalRevenue - operatingCosts;
   const ebitdaMargin = ((totalRevenue - operatingCosts) / totalRevenue * 100) || 0;
-  const roi = (netIncome / 300000 * 100) || 0;
+  
+  // ROI based on 10% equity stake from $300K investment
+  // Implies $3M pre-money valuation
+  const investmentAmount = 300000;
+  const equityPercentage = 10; // 10% equity
+  const impliedPreMoneyValuation = investmentAmount / (equityPercentage / 100);
+  const projectedCompanyValue = netIncome * 15; // Conservative 15x earnings multiple
+  const equityValue = projectedCompanyValue * (equityPercentage / 100);
+  const roi = ((equityValue - investmentAmount) / investmentAmount * 100) || 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-mint-50 via-white to-mint-100">
