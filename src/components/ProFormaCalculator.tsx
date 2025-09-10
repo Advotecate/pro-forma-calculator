@@ -11,7 +11,6 @@ interface RevenueStreams {
   transactionFees: number;
   smsRevenue: number;
   consulting: number;
-  eventPlatform: number;
 }
 
 interface OrganizationType {
@@ -194,7 +193,6 @@ const ProFormaCalculator: React.FC = () => {
   // Business assumptions (now adjustable)
   const [businessAssumptions, setBusinessAssumptions] = useState({
     saasServiceTakeRate: 30, // percentage who take multiple services
-    eventPlatformUsageRate: 15, // percentage who use event platform
     marketplaceCommissionRate: 10, // percentage commission on GMV
     monthlyMultiplier: 12, // annual calculation multiplier
   });
@@ -245,21 +243,13 @@ const ProFormaCalculator: React.FC = () => {
     const totalConsulting = marketData.primaryConsulting + marketData.generalConsulting;
     const consulting = totalConsulting * shareMultiplier * (consultingMargin / 100) * businessAssumptions.monthlyMultiplier;
     
-    // Event Platform (calculated by organization type with different pricing)
-    let eventPlatform = 0;
-    Object.values(organizationTypes).forEach(type => {
-      const typeSubscriberCount = type.count * shareMultiplier * (type.captureRate / 100);
-      eventPlatform += typeSubscriberCount * type.subscriptionPrices.eventPlatform * businessAssumptions.monthlyMultiplier * (businessAssumptions.eventPlatformUsageRate / 100);
-    });
-    
     return {
       mediaCommissions,
       saasSubscriptions,
       marketplace,
       transactionFees,
       smsRevenue,
-      consulting,
-      eventPlatform
+      consulting
     };
   };
 
@@ -734,7 +724,7 @@ const ProFormaCalculator: React.FC = () => {
             {/* Business Assumptions Section */}
             <div>
               <h4 className="text-lg font-medium text-ink mb-4">Business Model Assumptions</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div>
                   <label className="text-sm font-medium text-ink mb-2 block">
                     SaaS Multi-Service Rate (%)
@@ -747,22 +737,7 @@ const ProFormaCalculator: React.FC = () => {
                     onChange={(e) => setBusinessAssumptions({...businessAssumptions, saasServiceTakeRate: Number(e.target.value)})}
                     className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-mint-600 focus:ring-2 focus:ring-mint-100"
                   />
-                  <p className="text-xs text-muted mt-1">% of customers using multiple SaaS services</p>
-                </div>
-                
-                <div>
-                  <label className="text-sm font-medium text-ink mb-2 block">
-                    Event Platform Usage (%)
-                  </label>
-                  <input
-                    type="number"
-                    min="5"
-                    max="50"
-                    value={businessAssumptions.eventPlatformUsageRate}
-                    onChange={(e) => setBusinessAssumptions({...businessAssumptions, eventPlatformUsageRate: Number(e.target.value)})}
-                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-mint-600 focus:ring-2 focus:ring-mint-100"
-                  />
-                  <p className="text-xs text-muted mt-1">% of customers using event platform</p>
+                  <p className="text-xs text-muted mt-1">% of customers using multiple SaaS services (includes Event Platform)</p>
                 </div>
                 
                 <div>
@@ -1144,8 +1119,7 @@ const ProFormaCalculator: React.FC = () => {
                 marketplace: 'Marketplace',
                 transactionFees: 'Transaction Fees',
                 smsRevenue: 'SMS Revenue',
-                consulting: 'Consulting',
-                eventPlatform: 'Event Platform'
+                consulting: 'Consulting'
               };
               
               return (
