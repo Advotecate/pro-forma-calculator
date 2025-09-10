@@ -1333,53 +1333,122 @@ const ProFormaCalculator: React.FC = () => {
           </div>
         )}
 
-        {/* Revenue Breakdown */}
+        {/* P&L Statement */}
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl border border-white/50 shadow-xl p-8">
           <h2 className="text-2xl font-heading font-medium text-ink mb-6 flex items-center">
             <TrendingUp className="w-6 h-6 mr-3 text-mint-600" />
-            Revenue Breakdown
+            P&L Statement
           </h2>
           
           <div className="space-y-4">
-            {Object.entries(revenues).map(([key, value]) => {
-              const percentage = (value / totalRevenue * 100) || 0;
-              const labels: Record<string, string> = {
-                mediaCommissions: 'Media Commissions',
-                saasSubscriptions: 'SaaS Subscriptions',
-                marketplace: 'Marketplace',
-                transactionFees: 'Transaction Fees',
-                smsRevenue: 'SMS Revenue',
-                consulting: 'Consulting'
-              };
-              
-              return (
-                <div key={key} className="relative">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-ink">{labels[key]}</span>
-                    <div className="flex items-center space-x-3">
-                      <span className="text-sm text-muted">{percentage.toFixed(1)}%</span>
-                      <span className="text-lg font-medium text-ink">
-                        ${(value / 1000000).toFixed(2)}M
-                      </span>
+            {/* Revenue Streams */}
+            <div className="mb-6">
+              <h3 className="text-lg font-medium text-ink mb-4">Revenue Streams</h3>
+              {Object.entries(revenues).map(([key, value]) => {
+                const percentage = (value / totalRevenue * 100) || 0;
+                const labels: Record<string, string> = {
+                  mediaCommissions: 'Media Commissions',
+                  saasSubscriptions: 'SaaS Subscriptions',
+                  marketplace: 'Marketplace',
+                  transactionFees: 'Transaction Fees',
+                  smsRevenue: 'SMS Revenue',
+                  consulting: 'Consulting'
+                };
+                
+                return (
+                  <div key={key} className="relative mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-ink">{labels[key]}</span>
+                      <div className="flex items-center space-x-3">
+                        <span className="text-sm text-muted">{percentage.toFixed(1)}%</span>
+                        <span className="text-lg font-medium text-mint-600">
+                          ${(value / 1000000).toFixed(2)}M
+                        </span>
+                      </div>
+                    </div>
+                    <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-mint-400 to-mint-600 rounded-full transition-all duration-500"
+                        style={{ width: `${percentage}%` }}
+                      />
                     </div>
                   </div>
-                  <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
-                    <div 
-                      className="h-full bg-gradient-to-r from-mint-400 to-mint-600 rounded-full transition-all duration-500"
-                      style={{ width: `${percentage}%` }}
-                    />
+                );
+              })}
+            </div>
+
+            {/* Operating Expenses */}
+            <div className="mb-6">
+              <h3 className="text-lg font-medium text-ink mb-4">Operating Expenses</h3>
+              {Object.entries(operatingExpenses).map(([key, value]) => {
+                const annualExpense = value * 12;
+                const percentage = (annualExpense / operatingCosts * 100) || 0;
+                const labels: Record<string, string> = {
+                  engineering: 'Engineering',
+                  mediaOperations: 'Media Operations',
+                  aiServices: 'AI Services',
+                  salesGrowth: 'Sales & Growth',
+                  infrastructure: 'Infrastructure',
+                  marketing: 'Marketing',
+                  compliance: 'Compliance'
+                };
+                
+                return (
+                  <div key={key} className="relative mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-ink">{labels[key]}</span>
+                      <div className="flex items-center space-x-3">
+                        <span className="text-sm text-muted">{percentage.toFixed(1)}%</span>
+                        <span className="text-lg font-medium text-red-600">
+                          ${(annualExpense / 1000000).toFixed(2)}M
+                        </span>
+                      </div>
+                    </div>
+                    <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-red-400 to-red-600 rounded-full transition-all duration-500"
+                        style={{ width: `${percentage}%` }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* P&L Summary */}
+            <div className="pt-6 border-t-2 border-gray-300">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-mint-50 p-4 rounded-xl border border-mint-200">
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-heading font-medium text-ink">Total Revenue</span>
+                    <span className="text-2xl font-heading font-medium text-mint-600">
+                      ${(totalRevenue / 1000000).toFixed(2)}M
+                    </span>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <div className="flex items-center justify-between">
-              <span className="text-lg font-heading font-medium text-ink">Total Revenue</span>
-              <span className="text-2xl font-heading font-medium text-mint-600">
-                ${(totalRevenue / 1000000).toFixed(2)}M
-              </span>
+                
+                <div className="bg-red-50 p-4 rounded-xl border border-red-200">
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-heading font-medium text-ink">Total Expenses</span>
+                    <span className="text-2xl font-heading font-medium text-red-600">
+                      ${(operatingCosts / 1000000).toFixed(2)}M
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="bg-green-50 p-4 rounded-xl border border-green-200">
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-heading font-medium text-ink">Net Profit</span>
+                    <span className="text-2xl font-heading font-medium text-success">
+                      ${(netIncome / 1000000).toFixed(2)}M
+                    </span>
+                  </div>
+                  <div className="text-center mt-2">
+                    <span className="text-sm text-muted">EBITDA Margin: </span>
+                    <span className="text-sm font-medium text-success">{ebitdaMargin.toFixed(1)}%</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
