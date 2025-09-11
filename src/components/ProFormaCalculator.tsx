@@ -445,6 +445,12 @@ const ProFormaCalculator: React.FC = () => {
 
 
       <div className="max-w-7xl mx-auto px-6 py-8">
+        
+        {/* Main Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-heading font-bold text-ink mb-2">Financial Projections</h1>
+          <p className="text-lg text-muted">Advotecate - Political Engagement Platform</p>
+        </div>
 
         {/* Main Content Wrapper with flex ordering */}
         <div className="flex flex-col">
