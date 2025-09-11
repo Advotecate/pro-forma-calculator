@@ -7,10 +7,9 @@ import {
 interface RevenueStreams {
   mediaCommissions: number;
   saasSubscriptions: number;
-  marketplace: number;
+  contractorConsultantGmv: number;
   transactionFees: number;
   smsRevenue: number;
-  consulting: number;
 }
 
 interface OrganizationType {
@@ -44,7 +43,6 @@ const ProFormaCalculator: React.FC = () => {
   const [mediaCommissionRate, setMediaCommissionRate] = useState(5); // percentage
   const [mediaPurchaseRate, setMediaPurchaseRate] = useState(20); // percentage of campaigns that purchase media
   const [smsProfit, setSmsProfit] = useState(0.001); // per SMS
-  const [consultingMargin, setConsultingMargin] = useState(10); // percentage
 
   // Advanced settings toggle
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -192,11 +190,11 @@ const ProFormaCalculator: React.FC = () => {
 
   // Additional market data (non-organization specific)
   const [marketData, setMarketData] = useState({
-    primaryConsulting: 500000,      // $500K consulting market (primary)
-    generalConsulting: 1000000,     // $1M consulting market (general) 
-    marketplaceListings: 50000,     // $50K monthly marketplace listing fees
-    contractorGmvAnnual: 2000000,   // $2M annual contractor transaction volume
+    contractorConsultantGmvAnnual: 3500000,   // $3.5M annual contractor/consultant transaction volume (combined)
   });
+
+  // Commission rate for contractor/consultant marketplace (adjustable)
+  const [contractorConsultantCommission, setContractorConsultantCommission] = useState(10); // percentage
 
   // Operating expenses (adjustable)
   const [operatingExpenses, setOperatingExpenses] = useState({
@@ -211,7 +209,6 @@ const ProFormaCalculator: React.FC = () => {
   // Business assumptions (now adjustable)
   const [businessAssumptions, setBusinessAssumptions] = useState({
     saasServiceTakeRate: 30, // percentage who take multiple services
-    marketplaceCommissionRate: 10, // percentage commission on GMV
   });
 
   // Calculate revenues based on inputs
@@ -265,28 +262,21 @@ const ProFormaCalculator: React.FC = () => {
       saasSubscriptions += typeSubscriberCount * typeAvgPrice * 12 * (businessAssumptions.saasServiceTakeRate / 100);
     });
     
-    // Marketplace - only apply scaling in Market Share mode
-    const marketplaceScaling = useMarketShareMode ? shareMultiplier : 1;
-    const marketplace = (marketData.marketplaceListings * marketplaceScaling * 12) + 
-                       (marketData.contractorGmvAnnual * marketplaceScaling * (businessAssumptions.marketplaceCommissionRate / 100));
-    
     // SMS Revenue (calculated from organization-specific SMS volumes)
     const totalSms = totalPrimarySms + totalGeneralSms;
     const smsRevenue = totalSms * smsProfit;
     
-    // Consulting - only apply scaling in Market Share mode  
-    const totalConsulting = marketData.primaryConsulting + marketData.generalConsulting;
-    const consultingScaling = useMarketShareMode ? shareMultiplier : 1;
-    const consulting = totalConsulting * consultingScaling * (consultingMargin / 100) * 12;
+    // Contractor/Consultant GMV - only apply scaling in Market Share mode  
+    const contractorConsultantScaling = useMarketShareMode ? shareMultiplier : 1;
+    const contractorConsultantGmv = marketData.contractorConsultantGmvAnnual * contractorConsultantScaling * (contractorConsultantCommission / 100);
     
     // Return revenues without additional scaling (already applied in mode-specific calculations)
     return {
       mediaCommissions,
       saasSubscriptions,
-      marketplace,
+      contractorConsultantGmv,
       transactionFees,
-      smsRevenue,
-      consulting
+      smsRevenue
     };
   };
 
@@ -355,6 +345,7 @@ const ProFormaCalculator: React.FC = () => {
     // Campaign season timeline - different revenue patterns throughout the year
     const months = [
       // Q4 2025 - Pre-launch phase
+      { month: 'Sep 2025', label: 'September 2025', revenueMultiplier: 0, launchPhase: 'pre-launch' },
       { month: 'Oct 2025', label: 'October 2025', revenueMultiplier: 0, launchPhase: 'pre-launch' },
       { month: 'Nov 2025', label: 'November 2025', revenueMultiplier: 0, launchPhase: 'pre-launch' },
       { month: 'Dec 2025', label: 'December 2025', revenueMultiplier: 0.005, launchPhase: 'soft-launch' }, // 0.5% of annual
@@ -381,8 +372,10 @@ const ProFormaCalculator: React.FC = () => {
 
     return months.map(({ month, label, revenueMultiplier, launchPhase }) => {
       const monthlyRevenue = annualRevenue * revenueMultiplier;
-      const monthlyExpenses = monthlyOpEx;
-                      const netProfit = monthlyRevenue - monthlyExpenses;
+      
+      // Special expenses for Sep/Oct/Nov 2025
+      const monthlyExpenses = (month === 'Sep 2025' || month === 'Oct 2025' || month === 'Nov 2025') ? 80000 : monthlyOpEx;
+      const netProfit = monthlyRevenue - monthlyExpenses;
       
       return {
         month,
@@ -434,12 +427,12 @@ const ProFormaCalculator: React.FC = () => {
   const netProfit = totalRevenue - operatingCosts;
   const ebitdaMargin = ((totalRevenue - operatingCosts) / totalRevenue * 100) || 0;
   
-  // ROI based on 10% profit share from $300K investment with 2x minimum guarantee
+  // ROI based on 15% profit share from $300K investment with 2x minimum guarantee
   const investmentAmount = 300000;
   const minimumReturn = 600000; // 2x minimum return
-  const profitSharePercentage = 10; // 10% of net profits
+  const profitSharePercentage = 15; // 15% of net profits
   const calculatedProfitShare = netProfit * (profitSharePercentage / 100);
-  const annualProfitShare = Math.max(calculatedProfitShare, minimumReturn); // Greater of 10% or $600K
+  const annualProfitShare = Math.max(calculatedProfitShare, minimumReturn); // Greater of 15% or $600K
   const roi = ((annualProfitShare - investmentAmount) / investmentAmount * 100) || 0; // ROI = profit/investment
 
   return (
@@ -515,7 +508,7 @@ const ProFormaCalculator: React.FC = () => {
                 <div className="flex items-center justify-between mb-2">
                   <Activity className="w-7 h-7 text-success" />
                   <span className="text-xs font-medium text-success bg-success/10 px-2 py-1 rounded-full">
-                    {calculatedProfitShare >= minimumReturn ? '10% Share' : '2x Min'}
+                    {calculatedProfitShare >= minimumReturn ? '15% Share' : '2x Min'}
                   </span>
                 </div>
                 <p className="text-xs text-muted mb-1">Investor ROI</p>
@@ -769,21 +762,22 @@ const ProFormaCalculator: React.FC = () => {
                 </div>
                 <div>
                   <label className="text-sm font-medium text-ink mb-2 block">
-                    Consulting Margin
+                    Contractor/Consultant Commission
                   </label>
                   <div className="flex items-center space-x-3">
                     <input
                       type="range"
                       min="5"
-                      max="30"
-                      value={consultingMargin}
-                      onChange={(e) => setConsultingMargin(Number(e.target.value))}
+                      max="20"
+                      value={contractorConsultantCommission}
+                      onChange={(e) => setContractorConsultantCommission(Number(e.target.value))}
                       className="flex-1 h-2 bg-mint-100 rounded-lg appearance-none cursor-pointer"
                     />
                     <span className="text-lg font-medium text-ink w-16 text-right">
-                      {consultingMargin}%
+                      {contractorConsultantCommission}%
                     </span>
                   </div>
+                  <p className="text-xs text-muted mt-1">Assumed $250 per contractor/consultant transaction</p>
                 </div>
               </div>
             </div>
@@ -884,56 +878,20 @@ const ProFormaCalculator: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
                 <div>
                   <label className="text-sm font-medium text-ink mb-2 block">
-                    Consulting Market ($M)
-                  </label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={(marketData.primaryConsulting + marketData.generalConsulting) / 1000000}
-                    onChange={(e) => {
-                      const total = Number(e.target.value) * 1000000;
-                      const ratio = marketData.primaryConsulting / (marketData.primaryConsulting + marketData.generalConsulting);
-                      setMarketData({
-                        ...marketData, 
-                        primaryConsulting: total * ratio,
-                        generalConsulting: total * (1 - ratio)
-                      });
-                    }}
-                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-mint-600 focus:ring-2 focus:ring-mint-100"
-                  />
-                  <p className="text-xs text-muted mt-1">Total consulting services market</p>
-                </div>
-                
-                <div>
-                  <label className="text-sm font-medium text-ink mb-2 block">
-                    Marketplace Listings ($M)
-                  </label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={marketData.marketplaceListings / 1000000}
-                    onChange={(e) => setMarketData({...marketData, marketplaceListings: Number(e.target.value) * 1000000})}
-                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-mint-600 focus:ring-2 focus:ring-mint-100"
-                  />
-                  <p className="text-xs text-muted mt-1">Monthly marketplace listing fees</p>
-                </div>
-                
-                <div>
-                  <label className="text-sm font-medium text-ink mb-2 block">
-                    Contractor GMV ($M)
+                    Contractor/Consultant GMV ($M)
                   </label>
                   <input
                     type="number"
                     step="1"
-                    value={marketData.contractorGmvAnnual / 1000000}
-                    onChange={(e) => setMarketData({...marketData, contractorGmvAnnual: Number(e.target.value) * 1000000})}
+                    value={marketData.contractorConsultantGmvAnnual / 1000000}
+                    onChange={(e) => setMarketData({...marketData, contractorConsultantGmvAnnual: Number(e.target.value) * 1000000})}
                     className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-mint-600 focus:ring-2 focus:ring-mint-100"
                   />
-                  <p className="text-xs text-muted mt-1">Annual contractor transaction volume</p>
+                  <p className="text-xs text-muted mt-1">Annual contractor and consultant transaction volume combined</p>
                 </div>
               </div>
             </div>
@@ -955,21 +913,6 @@ const ProFormaCalculator: React.FC = () => {
                     className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-mint-600 focus:ring-2 focus:ring-mint-100"
                   />
                   <p className="text-xs text-muted mt-1">% of customers using multiple SaaS services (includes Event Platform)</p>
-                </div>
-                
-                <div>
-                  <label className="text-sm font-medium text-ink mb-2 block">
-                    Marketplace Commission (%)
-                  </label>
-                  <input
-                    type="number"
-                    min="3"
-                    max="20"
-                    value={businessAssumptions.marketplaceCommissionRate}
-                    onChange={(e) => setBusinessAssumptions({...businessAssumptions, marketplaceCommissionRate: Number(e.target.value)})}
-                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-mint-600 focus:ring-2 focus:ring-mint-100"
-                  />
-                  <p className="text-xs text-muted mt-1">% commission on contractor GMV</p>
                 </div>
               </div>
             </div>
@@ -1385,10 +1328,9 @@ const ProFormaCalculator: React.FC = () => {
                 const labels: Record<string, string> = {
                   mediaCommissions: 'Media Commissions',
                   saasSubscriptions: 'SaaS Subscriptions',
-                  marketplace: 'Marketplace',
+                  contractorConsultantGmv: 'Contractor/Consultant GMV',
                   transactionFees: 'Transaction Fees',
-                  smsRevenue: 'SMS Revenue',
-                  consulting: 'Consulting'
+                  smsRevenue: 'SMS Revenue'
                 };
                 
                 return (
@@ -1494,7 +1436,7 @@ const ProFormaCalculator: React.FC = () => {
                     <span className="font-medium text-ink ml-2">${(investmentAmount / 1000000).toFixed(1)}M</span>
                   </div>
                   <div>
-                    <span className="text-muted">Profit Share (10%):</span>
+                    <span className="text-muted">Profit Share (15%):</span>
                     <span className="font-medium text-ink ml-2">${(calculatedProfitShare / 1000000).toFixed(2)}M</span>
                   </div>
                   <div>
