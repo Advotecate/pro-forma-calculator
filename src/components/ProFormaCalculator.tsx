@@ -25,18 +25,16 @@ interface OrganizationType {
   generalSms: number;
   subscriptionPrices: {
     votebuilder: number;
-    eventPlatform: number;
-    mapping: number;
-    advancedVoterData: number;
+    advancedFeatures: number;
   };
 }
 
 const ProFormaCalculator: React.FC = () => {
   // State for calculation method toggle
-  const [useMarketShareMode, setUseMarketShareMode] = useState(false); // false = individual mode, true = market share mode
+  const [useMarketShareMode, setUseMarketShareMode] = useState(true); // false = individual mode, true = market share mode
   
   // State for all interactive controls
-  const [marketShare, setMarketShare] = useState(100); // percentage for calculations
+  const [marketShare, setMarketShare] = useState(10); // percentage for calculations
   const [transactionFeeTotal, setTransactionFeeTotal] = useState(350); // basis points
   const [transactionFeeNet, setTransactionFeeNet] = useState(100); // basis points we keep
 
@@ -73,9 +71,7 @@ const ProFormaCalculator: React.FC = () => {
       generalSms: 100000,           // 100K messages per campaign
       subscriptionPrices: {
         votebuilder: 100,
-        eventPlatform: 75,
-        mapping: 100,
-        advancedVoterData: 250,
+        advancedFeatures: 425,  // 75 + 100 + 250
       }
     },
     localLarge: {
@@ -91,9 +87,7 @@ const ProFormaCalculator: React.FC = () => {
       generalSms: 250000,           // 250K messages per campaign
       subscriptionPrices: {
         votebuilder: 250,
-        eventPlatform: 100,
-        mapping: 200,
-        advancedVoterData: 400,
+        advancedFeatures: 700,  // 100 + 200 + 400
       }
     },
     stateHouse: {
@@ -109,9 +103,7 @@ const ProFormaCalculator: React.FC = () => {
       generalSms: 50000,            // 50K messages per campaign
       subscriptionPrices: {
         votebuilder: 400,
-        eventPlatform: 100,
-        mapping: 200,
-        advancedVoterData: 500,
+        advancedFeatures: 800,  // 100 + 200 + 500
       }
     },
     stateSenate: {
@@ -127,9 +119,7 @@ const ProFormaCalculator: React.FC = () => {
       generalSms: 250000,           // 250K messages per campaign
       subscriptionPrices: {
         votebuilder: 500,
-        eventPlatform: 150,
-        mapping: 250,
-        advancedVoterData: 750,
+        advancedFeatures: 1150,  // 150 + 250 + 750
       }
     },
     statewide: {
@@ -145,9 +135,7 @@ const ProFormaCalculator: React.FC = () => {
       generalSms: 2000000,          // 2M messages per campaign
       subscriptionPrices: {
         votebuilder: 1000,
-        eventPlatform: 250,
-        mapping: 450,
-        advancedVoterData: 1500,
+        advancedFeatures: 2200,  // 250 + 450 + 1500
       }
     },
     usHouse: {
@@ -163,9 +151,7 @@ const ProFormaCalculator: React.FC = () => {
       generalSms: 250000,           // 250K messages per campaign
       subscriptionPrices: {
         votebuilder: 500,
-        eventPlatform: 150,
-        mapping: 250,
-        advancedVoterData: 1000,
+        advancedFeatures: 1400,  // 150 + 250 + 1000
       }
     },
     usSenate: {
@@ -181,9 +167,7 @@ const ProFormaCalculator: React.FC = () => {
       generalSms: 35000000,         // 35M messages per campaign
       subscriptionPrices: {
         votebuilder: 1000,
-        eventPlatform: 250,
-        mapping: 450,
-        advancedVoterData: 1500,
+        advancedFeatures: 2200,  // 250 + 450 + 1500
       }
     }
   });
@@ -255,10 +239,8 @@ const ProFormaCalculator: React.FC = () => {
         : Math.max(type.capturedPrimaryCount, type.capturedGeneralCount);
       const typeAvgPrice = (
         type.subscriptionPrices.votebuilder + 
-        type.subscriptionPrices.eventPlatform + 
-        type.subscriptionPrices.mapping + 
-        type.subscriptionPrices.advancedVoterData
-      ) / 4;
+        type.subscriptionPrices.advancedFeatures
+      ) / 2;
       saasSubscriptions += typeSubscriberCount * typeAvgPrice * 12 * (businessAssumptions.saasServiceTakeRate / 100);
     });
     
@@ -310,9 +292,9 @@ const ProFormaCalculator: React.FC = () => {
     const newMode = !useMarketShareMode;
     setUseMarketShareMode(newMode);
     
-    // Reset market share to 5% when switching TO market share mode
+    // Reset market share to 10% when switching TO market share mode
     if (newMode) {
-      setMarketShare(5);
+      setMarketShare(10);
     } else {
       // Set to 100% when switching to individual mode (but slider will be disabled)
       setMarketShare(100);
@@ -1197,7 +1179,7 @@ const ProFormaCalculator: React.FC = () => {
                     {/* Subscription Pricing */}
                     <div className="mb-4">
                       <h6 className="text-sm font-medium text-ink mb-3">Monthly Subscription Pricing</h6>
-                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                       <div>
                         <label className="text-xs font-medium text-ink mb-1 block">Votebuilder ($)</label>
                         <input
@@ -1213,45 +1195,18 @@ const ProFormaCalculator: React.FC = () => {
                       </div>
                       
                       <div>
-                        <label className="text-xs font-medium text-ink mb-1 block">Event Platform ($)</label>
+                        <label className="text-xs font-medium text-ink mb-1 block">Advanced Features ($)</label>
                         <input
                           type="number"
-                          value={type.subscriptionPrices.eventPlatform}
+                          value={type.subscriptionPrices.advancedFeatures}
                           onChange={(e) => {
                             const newTypes = { ...organizationTypes };
-                            newTypes[key].subscriptionPrices.eventPlatform = Number(e.target.value);
+                            newTypes[key].subscriptionPrices.advancedFeatures = Number(e.target.value);
                             setOrganizationTypes(newTypes);
                           }}
                           className="w-full px-2 py-1 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-mint-600 focus:ring-1 focus:ring-mint-100"
                         />
-                      </div>
-                      
-                      <div>
-                        <label className="text-xs font-medium text-ink mb-1 block">Mapping ($)</label>
-                        <input
-                          type="number"
-                          value={type.subscriptionPrices.mapping}
-                          onChange={(e) => {
-                            const newTypes = { ...organizationTypes };
-                            newTypes[key].subscriptionPrices.mapping = Number(e.target.value);
-                            setOrganizationTypes(newTypes);
-                          }}
-                          className="w-full px-2 py-1 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-mint-600 focus:ring-1 focus:ring-mint-100"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="text-xs font-medium text-ink mb-1 block">Advanced Voter Data ($)</label>
-                        <input
-                          type="number"
-                          value={type.subscriptionPrices.advancedVoterData}
-                          onChange={(e) => {
-                            const newTypes = { ...organizationTypes };
-                            newTypes[key].subscriptionPrices.advancedVoterData = Number(e.target.value);
-                            setOrganizationTypes(newTypes);
-                          }}
-                          className="w-full px-2 py-1 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-mint-600 focus:ring-1 focus:ring-1 focus:ring-mint-100"
-                        />
+                        <p className="text-xs text-muted mt-1">Event Platform, Mapping, Advanced Voter Data combined</p>
                       </div>
                     </div>
                     </div>
